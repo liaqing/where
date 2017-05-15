@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.where.where_web.business.model.Goods" >
+  <resultMap id="BaseResultMap" type="com.where.where_web.business.model.Goods" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="PRICE" property="price" jdbcType="DECIMAL" />
+    <result column="SORT" property="sort" jdbcType="DECIMAL" />
+    <result column="REPERTORY" property="repertory" jdbcType="VARCHAR" />
+    <result column="SHOP_ID" property="shopId" jdbcType="DECIMAL" />
+    <!-- <result column="GOODS_CATEGORY_ID" property="goodsCategoryId" jdbcType="DECIMAL" /> -->
+    <association property="goodsCategory" column="GOODS_CATEGORY_ID" javaType="com.where.where_web.business.model.Goods" select="com.where.where_web.business.model.GoodsCategory.selectByPrimaryKey"></association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, NAME, PRICE, SORT, REPERTORY, GOODS_CATEGORY_ID, SHOP_ID
+  </sql>
+  
+  <!-- 通过产品分类id查询对象 -->
+  <select id="selectByShopCategoryId"  parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+		select 
+		<include refid="Base_Column_List"/>
+		from goods
+		where goods_category_id = #{goodsCategoryId,jdbcType=DECIMAL}
+	</select> 
+  
+  <!--通过 店铺id查询对象  -->
+	<select id="selectByShopId"  parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+		select 
+		<include refid="Base_Column_List"/>
+		from goods
+		where shop_id = #{shopId,jdbcType=DECIMAL}
+	</select>  
+  <!--通过id查询对象  -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from GOODS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <!-- 查询所有对象 -->
+  <select id="select" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from goods
+  </select>
+  <!-- 通过名字查询对象 -->
+  <select id="selectByName" parameterType="com.where.where_web.business.model.Goods" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from goods
+  	where name=#{name,jdbcType=VARCHAR} order by sort
+  </select>
+  
+  <!-- 模糊查询对象 -->
+  <select id="selectLike" parameterType="com.where.where_web.business.model.Goods" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from goods
+  	<where>
+  		<if test="name !=null">
+  			name like '%'||#{name}||'%'
+  		</if>
+  		<if test="shopId != null">
+  			and shop_id = #{shopId,jdbcType=DECIMAL}
+  		</if>
+  	</where>
+  	order by sort,name
+  </select>
+  
+  <!-- 分页查询对象 --> 
+  <select id="find" parameterType="map" resultMap="BaseResultMap">
+  	SELECT * FROM
+		(
+		   SELECT A.*, ROWNUM RN
+		   FROM (
+		   select * from goods
+		   <where>
+		   	<if test="goods.name!=null">
+		   		name = #{goods.name}
+		   	</if>
+		   	<if test="shopId != null">
+  				and shop_id = #{shopId,jdbcType=DECIMAL}
+  			</if>
+		   </where>
+		   ) A
+		)
+	WHERE RN between (#{pageNo}-1)*#{pageSize}+1 and #{pageNo}*#{pageSize} order by sort,name
+  </select>
+  
+  <!--分页模糊查询对象  -->
+      <select id="findLike" parameterType="map" resultMap="BaseResultMap">
+  		SELECT * FROM
+		(
+		   SELECT A.*, ROWNUM RN
+		   FROM (
+		   select * from goods
+		   <where>
+		   	<if test="goods.name!=null">
+		   		name like '%'||#{goods.name}||'%'
+		   	</if>
+		   <if test="shopId != null">
+  				and shop_id = #{shopId,jdbcType=DECIMAL}
+  			</if>
+		   </where>
+		   
+		   ) A
+		   
+		)
+	WHERE RN between (#{pageNo}-1)*#{pageSize}+1 and #{pageNo}*#{pageSize} order by sort,name
+  </select>
+  <!--按条件查询条数  -->
+   <select id="findCount" parameterType="map" resultType="java.lang.Integer">
+  	SELECT count(*) FROM
+		(
+		   SELECT A.*, ROWNUM RN
+		   FROM (
+		   select * from goods
+		   <where>
+		   	<if test="goods.name!=null">
+		   		name = #{goods.name}
+		   	</if>
+		    <if test="shopId != null">
+  				and shop_id = #{shopId,jdbcType=DECIMAL}
+  			</if>
+		   </where>
+		   
+		   ) A
+		   
+		)
+  </select>
+  <!--按条件模糊查询条数  -->
+  <select id="findCountLike" parameterType="map" resultType="java.lang.Integer">
+  	SELECT count(*) FROM
+		(
+		   SELECT A.*, ROWNUM RN
+		   FROM (
+		   select * from goods
+		   <where>
+		   	<if test="goods.name!=null">
+		   		name like '%'||#{goods.name}||'%'
+		   	</if>
+		    <if test="shopId != null">
+  				and shop_id = #{shopId,jdbcType=DECIMAL}
+  			</if>
+		   </where>
+		   
+		   ) A
+		   
+		)
+  </select>
+  
+  <!--根据id删除对象  -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from GOODS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  
+  <!-- 插入对象 -->
+  <insert id="insert" parameterType="com.where.where_web.business.model.Goods" >
+    insert into GOODS (ID, NAME, PRICE, 
+      SORT, REPERTORY, GOODS_CATEGORY_ID,SHOP_ID
+      )
+    values (#{id,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{sort,jdbcType=DECIMAL}, #{repertory,jdbcType=VARCHAR}, #{goodsCategory.id,jdbcType=DECIMAL},#{shopId,jdbcType=DECIMAL}
+      )
+  </insert>
+  <!-- 选择性插入数据 -->
+  <insert id="insertSelective" parameterType="com.where.where_web.business.model.Goods" >
+    insert into GOODS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="price != null" >
+        PRICE,
+      </if>
+      <if test="sort != null" >
+        SORT,
+      </if>
+      <if test="repertory != null" >
+        REPERTORY,
+      </if>
+      <if test="goodsCategory.id != null" >
+        GOODS_CATEGORY_ID,
+      </if>
+      <if test="shopId != null">
+      	SHOP_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="repertory != null" >
+        #{repertory,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCategory.id != null" >
+        #{goodsCategory.id,jdbcType=DECIMAL},
+      </if>
+       <if test="shopId != null">
+  			#{shopId,jdbcType=DECIMAL},
+  		</if>
+    </trim>
+  </insert>
+  
+  <!-- 选择性更新数据 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.where.where_web.business.model.Goods" >
+    update GOODS
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        PRICE = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="sort != null" >
+        SORT = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="repertory != null" >
+        REPERTORY = #{repertory,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCategory.id != null" >
+        GOODS_CATEGORY_ID = #{goodsCategory.id,jdbcType=DECIMAL},
+      </if>
+       <if test="shopId != null">
+  				shop_id = #{shopId,jdbcType=DECIMAL},
+  			</if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <!--通过id更新数据  -->
+  <update id="updateByPrimaryKey" parameterType="com.where.where_web.business.model.Goods" >
+    update GOODS
+    set NAME = #{name,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=DECIMAL},
+      SORT = #{sort,jdbcType=DECIMAL},
+      REPERTORY = #{repertory,jdbcType=VARCHAR},
+      GOODS_CATEGORY_ID = #{goodsCategory.id,jdbcType=DECIMAL},
+      shop_id = #{shopId,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

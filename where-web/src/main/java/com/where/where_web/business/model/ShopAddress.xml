@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.where.where_web.business.model.ShopAddress" >
+  <resultMap id="BaseResultMap" type="com.where.where_web.business.model.ShopAddress" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROVINCE" property="province" jdbcType="VARCHAR" />
+    <result column="CITY" property="city" jdbcType="VARCHAR" />
+    <result column="COUNTY" property="county" jdbcType="VARCHAR" />
+    <result column="SPECIFIC_ADDRESS" property="specificAddress" jdbcType="VARCHAR" />
+    <result column="COORDINATE" property="coordinate" jdbcType="VARCHAR" />
+    <result column="SHOP_ID" property="shopId" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROVINCE, CITY, COUNTY, SPECIFIC_ADDRESS, COORDINATE, SHOP_ID
+  </sql>
+  <!-- 通过店铺id获取对象 -->
+   <select id="selectByShopId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from SHOP_ADDRESS
+    where shop_id = #{shop_id,jdbcType=DECIMAL}
+  </select>
+  
+  <!-- 通过省市查询对象 -->
+  <select id="selectByProCity" parameterType="com.where.where_web.business.model.ShopAddress" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from SHOP_ADDRESS
+    where PROVINCE = #{province,jdbcType=VARCHAR} and CITY = #{city,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from SHOP_ADDRESS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from SHOP_ADDRESS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.where.where_web.business.model.ShopAddress" >
+    insert into SHOP_ADDRESS (ID, PROVINCE, CITY, 
+      COUNTY, SPECIFIC_ADDRESS, COORDINATE, 
+      SHOP_ID)
+    values (#{id,jdbcType=DECIMAL}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{county,jdbcType=VARCHAR}, #{specificAddress,jdbcType=VARCHAR}, #{coordinate,jdbcType=VARCHAR}, 
+      #{shopId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.where.where_web.business.model.ShopAddress" >
+    insert into SHOP_ADDRESS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="province != null" >
+        PROVINCE,
+      </if>
+      <if test="city != null" >
+        CITY,
+      </if>
+      <if test="county != null" >
+        COUNTY,
+      </if>
+      <if test="specificAddress != null" >
+        SPECIFIC_ADDRESS,
+      </if>
+      <if test="coordinate != null" >
+        COORDINATE,
+      </if>
+      <if test="shopId != null" >
+        SHOP_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="specificAddress != null" >
+        #{specificAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinate != null" >
+        #{coordinate,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.where.where_web.business.model.ShopAddress" >
+    update SHOP_ADDRESS
+    <set >
+      <if test="province != null" >
+        PROVINCE = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        CITY = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        COUNTY = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="specificAddress != null" >
+        SPECIFIC_ADDRESS = #{specificAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinate != null" >
+        COORDINATE = #{coordinate,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        SHOP_ID = #{shopId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.where.where_web.business.model.ShopAddress" >
+    update SHOP_ADDRESS
+    set PROVINCE = #{province,jdbcType=VARCHAR},
+      CITY = #{city,jdbcType=VARCHAR},
+      COUNTY = #{county,jdbcType=VARCHAR},
+      SPECIFIC_ADDRESS = #{specificAddress,jdbcType=VARCHAR},
+      COORDINATE = #{coordinate,jdbcType=VARCHAR},
+      SHOP_ID = #{shopId,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

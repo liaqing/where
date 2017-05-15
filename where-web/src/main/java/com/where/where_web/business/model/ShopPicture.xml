@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.where.where_web.business.model.ShopPicture">
+  <resultMap id="BaseResultMap" type="com.where.where_web.business.model.ShopPicture">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="FILE_SIZE" jdbcType="DECIMAL" property="fileSize" />
+    <result column="SUFFIX_NAME" jdbcType="VARCHAR" property="suffixName" />
+    <result column="SHOP_ID" jdbcType="DECIMAL" property="shopId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, URL, FILE_SIZE, SUFFIX_NAME, SHOP_ID
+  </sql>
+  <!--通过店铺id获取对象  -->
+  <select id="selectByShopId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	  select 
+    <include refid="Base_Column_List" />
+    from SHOP_PICTURE
+    where shop_id = #{shop_id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SHOP_PICTURE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SHOP_PICTURE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  
+   <delete id="deleteByShopId" parameterType="java.lang.Integer">
+    delete from SHOP_PICTURE
+    where shop_id = #{shop_id,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insert" parameterType="com.where.where_web.business.model.ShopPicture">
+    insert into SHOP_PICTURE (ID, NAME, URL, 
+      FILE_SIZE, SUFFIX_NAME, SHOP_ID
+      )
+    values (#{id,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{fileSize,jdbcType=DECIMAL}, #{suffixName,jdbcType=VARCHAR}, #{shopId,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.where.where_web.business.model.ShopPicture">
+    insert into SHOP_PICTURE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="fileSize != null">
+        FILE_SIZE,
+      </if>
+      <if test="suffixName != null">
+        SUFFIX_NAME,
+      </if>
+      <if test="shopId != null">
+        SHOP_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        #{fileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="suffixName != null">
+        #{suffixName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.where.where_web.business.model.ShopPicture">
+    update SHOP_PICTURE
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null">
+        FILE_SIZE = #{fileSize,jdbcType=DECIMAL},
+      </if>
+      <if test="suffixName != null">
+        SUFFIX_NAME = #{suffixName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        SHOP_ID = #{shopId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.where.where_web.business.model.ShopPicture">
+    update SHOP_PICTURE
+    set NAME = #{name,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      FILE_SIZE = #{fileSize,jdbcType=DECIMAL},
+      SUFFIX_NAME = #{suffixName,jdbcType=VARCHAR},
+      SHOP_ID = #{shopId,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:annotation-config/>   
+    <context:component-scan base-package="com.where.where_user_management.service,com.where.where_web.shiro.service.impl,
+    com.where.where_web.business.service.impl" />
+    <context:component-scan base-package="com.where.where_user_management.dao,com.where.where_web.shiro.dao.impl,
+    com.where.where_web.business.dao.impl" />
+	 <!--  引入jdbc配置文件   -->
+	 <!--    -->
+	<bean id="propertyConfigurer"
+         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+         <property name="location" value="classpath:jdbc.properties" />
+    </bean>
+	 
+	
+	 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+          <!-- 用户名-->  
+          <property name="user" value="${username}"/>  
+          <!-- 用户密码-->  
+          <property name="password" value="${password}"/>  
+          <property name="driverClass" value="${driver}"/>  
+          <property name="jdbcUrl" value="${url}"/>  
+   	 </bean>
+   	 
+   	  <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <!-- 自动扫描mapping.xml文件 -->  
+        <property name="mapperLocations" >
+        	<list>
+        		<value>classpath*:com/where/where_user_management/model/*.xml</value>
+        		<value>classpath*:com/where/where_web/shiro/entity/*.xml</value>
+        		<value>classpath*:com/where/where_web/business/model/*.xml</value>
+        	</list>
+        	<!-- <array>
+        		<value>classpath*:com/where/where_user_management/model/*.xml</value>
+        		<value>classpath*:com/where/where_web/shiro/entity/*.xml</value>
+        	</array> -->
+        
+        </property>  
+        <property name="typeAliasesPackage" value="com.where.where_user_management.model"></property>
+    </bean>  
+    <!-- 
+     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+       
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+        <property name="basePackage" value="com.where.where_user_management.dao" />  
+    </bean>   -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+</beans>

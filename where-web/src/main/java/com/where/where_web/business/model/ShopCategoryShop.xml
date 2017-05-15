@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.where.where_web.business.model.ShopCategoryShop" >
+  <resultMap id="BaseResultMap" type="com.where.where_web.business.model.ShopCategoryShop" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="SHOP_CATEGORY_ID" property="shopCategoryId" jdbcType="DECIMAL" />
+    <result column="SHOP_ID" property="shopId" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, SHOP_CATEGORY_ID, SHOP_ID
+  </sql>
+  <!-- 通过店铺id查询对象 -->
+  <select id="selectByShopId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	  select 
+	    <include refid="Base_Column_List" />
+	    from SHOP_CATEGORY_SHOP
+	    where shop_id = #{shop_id,jdbcType=DECIMAL}
+  </select>
+  
+    <!-- 通过店铺分类id查询对象 -->
+  <select id="selectByShopCategoryId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	  select 
+	    <include refid="Base_Column_List" />
+	    from SHOP_CATEGORY_SHOP
+	    where shop_category_id = #{shop_category_id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from SHOP_CATEGORY_SHOP
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from SHOP_CATEGORY_SHOP
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.where.where_web.business.model.ShopCategoryShop" >
+    insert into SHOP_CATEGORY_SHOP (ID, SHOP_CATEGORY_ID, SHOP_ID
+      )
+    values (#{id,jdbcType=DECIMAL}, #{shopCategoryId,jdbcType=DECIMAL}, #{shopId,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.where.where_web.business.model.ShopCategoryShop" >
+    insert into SHOP_CATEGORY_SHOP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="shopCategoryId != null" >
+        SHOP_CATEGORY_ID,
+      </if>
+      <if test="shopId != null" >
+        SHOP_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="shopCategoryId != null" >
+        #{shopCategoryId,jdbcType=DECIMAL},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.where.where_web.business.model.ShopCategoryShop" >
+    update SHOP_CATEGORY_SHOP
+    <set >
+      <if test="shopCategoryId != null" >
+        SHOP_CATEGORY_ID = #{shopCategoryId,jdbcType=DECIMAL},
+      </if>
+      <if test="shopId != null" >
+        SHOP_ID = #{shopId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.where.where_web.business.model.ShopCategoryShop" >
+    update SHOP_CATEGORY_SHOP
+    set SHOP_CATEGORY_ID = #{shopCategoryId,jdbcType=DECIMAL},
+      SHOP_ID = #{shopId,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

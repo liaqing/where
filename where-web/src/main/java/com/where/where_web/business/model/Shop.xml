@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.where.where_web.business.model.Shop" >
+  <resultMap id="BaseResultMap" type="com.where.where_web.business.model.Shop" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+   <!--  <result column="ADDRESS" property="address" jdbcType="VARCHAR" /> -->
+   <!--  <result column="BUSINESS_ID" property="businessId" jdbcType="DECIMAL" /> -->
+    <association property="business" column="BUSINESS_ID" javaType="com.where.where_user_management.model.Business" select="com.where.where_user_management.model.Business.selectByPrimaryKey"></association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, NAME, STATUS, BUSINESS_ID
+  </sql>
+  <!-- 通过商家id查询店铺 -->
+  <select id="selectByBusinessId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select 
+    <include refid="Base_Column_List" />
+    from SHOP
+    where business_id = #{business.id,jdbcType=DECIMAL}
+  </select>
+  
+   <!-- 查询所有对象 -->
+  <select id="select" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from shop
+  </select>
+  
+  
+  <!--通过名字查询对象  -->
+  <select id="selectByName" parameterType="com.where.where_web.business.model.Shop" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from shop
+  	where name=#{name,jdbcType=VARCHAR}
+  </select>
+  
+    <!-- 模糊查询对象 -->
+   <select id="selectLike" parameterType="com.where.where_web.business.model.Shop" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from Users
+  	<where>
+  		<if test="name != null">
+  			name like '%'||#{name}||'%'
+  		</if>
+  	</where>
+  </select>
+  
+   <!--分页查询对象  -->
+  <select id="find" parameterType="map" resultMap="BaseResultMap">
+  	SELECT * FROM
+		(
+		   SELECT A.*, ROWNUM RN
+		   FROM (
+		   select * from shop
+		   <where>
+		   	<if test="shop.name!=null">
+		   		name = #{shop.name}
+		   	</if>
+		   
+		   </where>
+		   
+		   ) A
+		   
+		)
+	WHERE RN (#{pageNo}-1)*#{pageSize}+1 and #{pageNo}*#{pageSize}
+  
+  
+  </select>
+    <select id="findCount" parameterType="map" resultType="java.lang.Integer">
+  	SELECT count(*) FROM
+		(
+		   SELECT A.*, ROWNUM RN
+		   FROM (
+		   select * from shop
+		   <where>
+		   	<if test="shop.name!=null">
+		   		name = #{shop.name}
+		   	</if>
+		   
+		   </where>
+		   
+		   ) A
+		   
+		)
+		</select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from SHOP
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from SHOP
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.where.where_web.business.model.Shop" >
+    insert into SHOP (ID, NAME, STATUS, 
+     BUSINESS_ID)
+    values (#{id,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{business.id,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.where.where_web.business.model.Shop" >
+    insert into SHOP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      
+      <if test="business.id != null" >
+        BUSINESS_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="business.id != null" >
+        #{business.id,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.where.where_web.business.model.Shop" >
+    update SHOP
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="business.id != null" >
+        BUSINESS_ID = #{business.id,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.where.where_web.business.model.Shop" >
+    update SHOP
+    set NAME = #{name,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      
+      BUSINESS_ID = #{business.id,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

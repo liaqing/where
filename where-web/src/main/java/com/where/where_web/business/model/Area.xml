@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.where.where_web.business.model.Area" >
+  <resultMap id="BaseResultMap" type="com.where.where_web.business.model.Area" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CODE" property="code" jdbcType="DECIMAL" />
+    <result column="PARENTCODE" property="parentcode" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="LEVELCOUNT" property="levelcount" jdbcType="DECIMAL" />
+    <result column="LATITUDE" property="latitude" jdbcType="VARCHAR" />
+    <result column="LONGITUDE" property="longitude" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CODE, PARENTCODE, NAME, LEVELCOUNT, LATITUDE, LONGITUDE
+  </sql>
+  <!-- 通过code查询 -->
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from AREA
+    where code = #{code,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from AREA
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from AREA
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.where.where_web.business.model.Area" >
+    insert into AREA (ID, CODE, PARENTCODE, 
+      NAME, LEVELCOUNT, LATITUDE, 
+      LONGITUDE)
+    values (#{id,jdbcType=DECIMAL}, #{code,jdbcType=DECIMAL}, #{parentcode,jdbcType=DECIMAL}, 
+      #{name,jdbcType=VARCHAR}, #{levelcount,jdbcType=DECIMAL}, #{latitude,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.where.where_web.business.model.Area" >
+    insert into AREA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="parentcode != null" >
+        PARENTCODE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="levelcount != null" >
+        LEVELCOUNT,
+      </if>
+      <if test="latitude != null" >
+        LATITUDE,
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=DECIMAL},
+      </if>
+      <if test="parentcode != null" >
+        #{parentcode,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="levelcount != null" >
+        #{levelcount,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.where.where_web.business.model.Area" >
+    update AREA
+    <set >
+      <if test="code != null" >
+        CODE = #{code,jdbcType=DECIMAL},
+      </if>
+      <if test="parentcode != null" >
+        PARENTCODE = #{parentcode,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="levelcount != null" >
+        LEVELCOUNT = #{levelcount,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        LATITUDE = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        LONGITUDE = #{longitude,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.where.where_web.business.model.Area" >
+    update AREA
+    set CODE = #{code,jdbcType=DECIMAL},
+      PARENTCODE = #{parentcode,jdbcType=DECIMAL},
+      NAME = #{name,jdbcType=VARCHAR},
+      LEVELCOUNT = #{levelcount,jdbcType=DECIMAL},
+      LATITUDE = #{latitude,jdbcType=VARCHAR},
+      LONGITUDE = #{longitude,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>
